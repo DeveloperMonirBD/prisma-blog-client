@@ -14,6 +14,7 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ModeToggle } from './ModeToggle';
 interface MenuItem {
     title: string;
     url: string;
@@ -99,6 +100,7 @@ const Navbar = ({
                         </div>
                     </div>
                     <div className="flex gap-2">
+                        <ModeToggle />
                         <Button
                             variant="outline"
                             size="sm"

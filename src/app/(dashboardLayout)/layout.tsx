@@ -10,10 +10,22 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({
+    children,
+    admin,
+    user
+}: {
+    children: React.ReactNode;
+    admin: React.ReactNode;
+    user: React.ReactNode;
+}) {
+    const userInfo = {
+        role: 'admin',
+    };
+
     return (
         <SidebarProvider>
-            <AppSidebar />
+            <AppSidebar user = {userInfo} />
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
                     <SidebarTrigger className="-ml-1" />
@@ -33,7 +45,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </BreadcrumbList>
                     </Breadcrumb>
                 </header>
-                <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+                <div className="flex flex-1 flex-col gap-4 p-4">
+                    {children}
+                    {userInfo?.role === 'admin' ? admin : user}
+                </div>
             </SidebarInset>
         </SidebarProvider>
     );

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { cn } from 'cn';
 
 import { Button } from '@/components/ui/button';
@@ -8,16 +8,19 @@ import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth-client';
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
-
     // handle google login
     const handleGoogleLogin = async () => {
         const data = authClient.signIn.social({
-            provider: "google",
-            callbackURL: "http://localhost:3000",
+            provider: 'google',
+            callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}`
         });
 
         console.log(data);
-    }
+    };
+
+
+    const session = authClient.useSession();
+    console.log(session)
 
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>

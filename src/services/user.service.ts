@@ -1,17 +1,17 @@
 import { cookies } from 'next/headers';
 
+const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL;
+
 export const userService = {
     getSession: async function () {
         try {
             const cookieStore = await cookies();
 
-            const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-            if (!API_URL) {
-                throw new Error('NEXT_PUBLIC_API_URL is not configured.');
+            if (!AUTH_URL) {
+                throw new Error('NEXT_PUBLIC_AUTH_URL is not configured.');
             }
 
-            const response = await fetch(`${API_URL}/api/auth/get-session`, {
+            const response = await fetch(`${AUTH_URL}/get-session`, {
                 headers: {
                     Cookie: cookieStore.toString()
                 },

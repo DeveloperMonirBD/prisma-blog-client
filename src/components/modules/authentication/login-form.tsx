@@ -5,22 +5,22 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { env } from '@/env';
 import { authClient } from '@/lib/auth-client';
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
     // handle google login
     const handleGoogleLogin = async () => {
-        const data = authClient.signIn.social({
+        const data = await authClient.signIn.social({
             provider: 'google',
-            callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}`
+            callbackURL: env.NEXT_PUBLIC_APP_URL
         });
 
         console.log(data);
     };
 
-
     const session = authClient.useSession();
-    console.log(session)
+    console.log(session);
 
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>

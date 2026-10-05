@@ -10,7 +10,7 @@ export const userService = {
             const cookieStore = await cookies();
 
             if (!AUTH_URL) {
-                throw new Error('NEXT_PUBLIC_AUTH_URL is not configured.');
+                throw new Error('AUTH_URL is not configured.');
             }
 
             const response = await fetch(`${AUTH_URL}/get-session`, {

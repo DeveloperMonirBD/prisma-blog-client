@@ -10,12 +10,17 @@ export const env = createEnv({
         AUTH_URL: z.string().url()
     },
 
-    // client: {},
+    client: {
+        NEXT_PUBLIC_APP_URL: z.string().url()
+    },
 
     runtimeEnv: {
         FRONTEND_URL: process.env.FRONTEND_URL,
         BACKEND_URL: process.env.BACKEND_URL,
         API_URL: process.env.API_URL,
-        AUTH_URL: process.env.AUTH_URL
-    }
+        AUTH_URL: process.env.AUTH_URL,
+        NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL
+    },
+
+    emptyStringAsUndefined: true
 });

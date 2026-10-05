@@ -21,7 +21,7 @@ export async function proxy(request: NextRequest) {
     }
 
     // Admin dashboard protection
-    if (pathname.startsWith('/dashboard/admin') && !isAdmin) {
+    if (pathname.startsWith('/admin-dashboard') && !isAdmin) {
         return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
@@ -34,5 +34,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*']
+    matcher: ['/dashboard/:path*', '/admin-dashboard/:path*']
 };

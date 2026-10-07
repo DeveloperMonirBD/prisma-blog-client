@@ -1,18 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { userService } from '@/services/user.service';
+import { blogService } from '@/services/blog.service';
 
 export default async function Home() {
-    const { data, error } = await userService.getSession();
+    const { data, meta, error } = await blogService.getBlogs();
 
-    if (error) {
-        console.error('Session error:', error);
-    }
-
-    console.log(data);
+    console.log('Posts data:', data, 'Meta:', meta, 'Error:', error);
 
     return (
         <div className="container">
-            {data?.user ? <h1>Welcome , {data.user.name}</h1> : <h1>Welcome, Guest</h1>}
+            {/* {data?.user ? <h1>Welcome , {data.user.name}</h1> : <h1>Welcome, Guest</h1>} */}
 
             <Button variant="outline">Click Here</Button>
         </div>

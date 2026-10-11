@@ -1,16 +1,9 @@
-import { Button } from '@/components/ui/button';
-import { blogService } from '@/services/blog.service';
+import BlogCard from '@/components/modules/homepage/blog/BlogCard';
 
 export default async function Home() {
-    const { data, meta, error } = await blogService.getBlogs();
-
-    console.log('Posts data:', data, 'Meta:', meta, 'Error:', error);
-
     return (
-        <div className="container">
-            {/* {data?.user ? <h1>Welcome , {data.user.name}</h1> : <h1>Welcome, Guest</h1>} */}
-
-            <Button variant="outline">Click Here</Button>
-        </div>
+        <main className="container mx-auto px-4 py-10">
+            <BlogCard />
+        </main>
     );
 }

@@ -7,11 +7,11 @@ export default async function BlogCard() {
         error
     } = await blogService.getBlogs(
         {
-            isFeatured: true,
-            search: 'fafa'
+            isFeatured: false,
+            // search: 'fafa'
         },
         {
-            revalidate: 60
+            cache: 'no-store'
         }
     );
 

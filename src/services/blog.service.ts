@@ -22,7 +22,10 @@ interface ServiceOptions {
 }
 
 export const blogService = {
-    getBlogs: async function (params?: GetBlogsParams, options?: ServiceOptions): Promise<BlogServiceResult> {
+    getBlogs: async function (
+        params?: GetBlogsParams,
+        options?: ServiceOptions
+    ): Promise<BlogServiceResult> {
         try {
             const url = new URL(`${env.API_URL}/posts`);
 
@@ -45,9 +48,11 @@ export const blogService = {
                 config.cache = options.cache;
             }
 
-            const response = await fetch(url.toString(), {
-                next: { revalidate: 60 }
-            });
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            const response = await fetch(url.toString(), config);
 
             if (!response.ok) {
                 return {

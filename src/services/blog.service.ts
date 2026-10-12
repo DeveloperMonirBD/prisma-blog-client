@@ -7,11 +7,46 @@ type BlogServiceResult = {
     error: { message: string } | null;
 };
 
+//* No Dynamic and No {cache: 'no-store'} : SSG -> Statistic Page Generation
+//* Dynamic and {cache: 'no-store'} : SSR -> Server Side Rendering(Dynamic Page Generation)
+//* next: { revalidate: 60 } : ISR -> Mixed Static and Server Side Rendering (Incremental Static Regeneration)
+
+interface GetBlogsParams {
+    isFeatured?: boolean;
+    search?: string;
+}
+
+interface ServiceOptions {
+    cache?: RequestCache;
+    revalidate?: number;
+}
+
 export const blogService = {
-    getBlogs: async function (): Promise<BlogServiceResult> {
+    getBlogs: async function (params?: GetBlogsParams, options?: ServiceOptions): Promise<BlogServiceResult> {
         try {
-            const response = await fetch(`${env.API_URL}/posts`, {
-                cache: 'no-store'
+            const url = new URL(`${env.API_URL}/posts`);
+
+            if (params) {
+                Object.entries(params).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null && value !== '') {
+                        url.searchParams.append(key, String(value));
+                    }
+                });
+            }
+
+            const config: RequestInit = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            const response = await fetch(url.toString(), {
+                next: { revalidate: 60 }
             });
 
             if (!response.ok) {

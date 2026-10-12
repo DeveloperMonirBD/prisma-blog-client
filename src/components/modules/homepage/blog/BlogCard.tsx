@@ -1,7 +1,19 @@
 import { blogService } from '@/services/blog.service';
 
 export default async function BlogCard() {
-    const { data: posts, meta, error } = await blogService.getBlogs();
+    const {
+        data: posts,
+        meta,
+        error
+    } = await blogService.getBlogs(
+        {
+            isFeatured: true,
+            search: 'fafa'
+        },
+        {
+            revalidate: 60
+        }
+    );
 
     if (error) {
         return (

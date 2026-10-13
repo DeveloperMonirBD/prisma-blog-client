@@ -1,5 +1,5 @@
 import { env } from '@/env';
-import { Blog, BlogApiResponse, BlogMeta } from '@/types';
+import { Blog, BlogApiResponse, BlogMeta, GetBlogsParams, ServiceOptions } from '@/types';
 
 type BlogServiceResult = {
     data: Blog[] | null;
@@ -10,16 +10,6 @@ type BlogServiceResult = {
 //* No Dynamic and No {cache: 'no-store'} : SSG -> Statistic Page Generation
 //* Dynamic and {cache: 'no-store'} : SSR -> Server Side Rendering(Dynamic Page Generation)
 //* next: { revalidate: 60 } : ISR -> Mixed Static and Server Side Rendering (Incremental Static Regeneration)
-
-interface GetBlogsParams {
-    isFeatured?: boolean;
-    search?: string;
-}
-
-interface ServiceOptions {
-    cache?: RequestCache;
-    revalidate?: number;
-}
 
 export const blogService = {
     getBlogs: async function (

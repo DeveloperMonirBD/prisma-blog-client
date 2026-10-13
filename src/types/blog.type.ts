@@ -30,3 +30,13 @@ export interface BlogApiResponse {
     meta: BlogMeta;
     data: Blog[];
 }
+
+export interface GetBlogsParams {
+    isFeatured?: boolean;
+    search?: string;
+}
+
+export interface ServiceOptions {
+    cache?: RequestCache;
+    revalidate?: number;
+}

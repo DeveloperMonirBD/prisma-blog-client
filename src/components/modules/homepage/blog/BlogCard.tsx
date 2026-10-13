@@ -1,4 +1,6 @@
 import { blogService } from '@/services/blog.service';
+import { ArrowRight, Eye, MessageCircle } from 'lucide-react';
+import Link from 'next/link';
 
 export default async function BlogCard() {
     const {
@@ -7,7 +9,7 @@ export default async function BlogCard() {
         error
     } = await blogService.getBlogs(
         {
-            isFeatured: false,
+            isFeatured: false
             // search: 'fafa'
         },
         {
@@ -110,15 +112,33 @@ export default async function BlogCard() {
 
                                 {/* Footer */}
                                 <div className="mt-auto flex items-center justify-between gap-3 border-t pt-4 text-sm text-muted-foreground">
-                                    <span className="inline-flex items-center gap-1.5">
-                                        <span>{post.views}</span>
-                                        <span>views</span>
-                                    </span>
+                                    <div className="flex items-center gap-4">
+                                        {/* Views */}
+                                        <span
+                                            className="inline-flex items-center gap-1.5"
+                                            title="Views"
+                                            aria-label={`${post.views} views`}>
+                                            <Eye className="size-4" />
+                                            <span>{post.views}</span>
+                                        </span>
 
-                                    <span className="inline-flex items-center gap-1.5">
-                                        <span>{post._count?.comments ?? 0}</span>
-                                        <span>comments</span>
-                                    </span>
+                                        {/* Comments */}
+                                        <span
+                                            className="inline-flex items-center gap-1.5"
+                                            title="Comments"
+                                            aria-label={`${post._count?.comments ?? 0} comments`}>
+                                            <MessageCircle className="size-4" />
+                                            <span>{post._count?.comments ?? 0}</span>
+                                        </span>
+                                    </div>
+
+                                    {/* Read More */}
+                                    <Link
+                                        href={`/blogs/${post.id}`}
+                                        className="inline-flex items-center gap-1 font-medium text-primary transition-colors hover:underline">
+                                        Read More
+                                        <ArrowRight className="size-4" />
+                                    </Link>
                                 </div>
                             </div>
                         </article>

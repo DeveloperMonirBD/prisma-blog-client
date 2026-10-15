@@ -1,5 +1,6 @@
 import { blogService } from '@/services/blog.service';
 import { ArrowRight, Eye, MessageCircle } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function BlogCard() {
@@ -9,7 +10,7 @@ export default async function BlogCard() {
         error
     } = await blogService.getBlogs(
         {
-            isFeatured: false
+            // isFeatured: false
             // search: 'fafa'
         },
         {
@@ -68,13 +69,13 @@ export default async function BlogCard() {
                             {/* Thumbnail */}
                             {post.thumbnail && (
                                 <div className="relative aspect-video overflow-hidden bg-muted">
-                                    {/* <Image
+                                    <Image
                                         src={post.thumbnail}
                                         alt={post.title}
                                         fill
                                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                         className="object-cover transition-transform duration-300 group-hover:scale-105"
-                                    /> */}
+                                    />
                                 </div>
                             )}
 

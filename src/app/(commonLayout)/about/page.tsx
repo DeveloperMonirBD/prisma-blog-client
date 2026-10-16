@@ -1,14 +1,30 @@
+'use client';
 
-export const dynamic = "force-dynamic";
+import { getBlogs } from '@/actions/blog.action';
+import { Blog } from '@/types';
+import { useEffect, useState } from 'react';
 
-export default async function AboutPage() {
-  await new Promise((resolve) => setTimeout(resolve, 4000));
+export default function AboutPage() {
+    const [data, setData] = useState<Blog[] | null>(null);
+    const [error, setError] = useState<Error | null>(null);
 
-  throw new Error("Something went wrong");
+    console.log(data);
 
-  return (
-      <div>
-          <h1>This is About Page</h1>
-      </div>
-  );
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data }: { data: Blog[] | null } = await getBlogs();
+
+                setData(data);
+            } catch (err) {
+                setError(err as Error);
+            }
+        })();
+    }, []);
+    return (
+        <div>
+            <h1>This is about page Component...</h1>
+            {error && <p className="text-red-500">{error.message}</p>}
+        </div>
+    );
 }

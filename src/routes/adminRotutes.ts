@@ -1,4 +1,4 @@
-import { Route } from "@/types";
+import { Route } from '@/types';
 
 export const adminRoutes: Route[] = [
     {

@@ -10,9 +10,9 @@ import {
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { env } from '@/env';
+import { revalidateTag, updateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { toast } from 'sonner';
 
 const API_URL = env.API_URL;
 
@@ -44,9 +44,52 @@ export default function CreateBlogFormServer() {
             body: JSON.stringify(blogData)
         });
 
-        if (res.status) {
-            redirect("/dashboard/create-blog?success")
-        }
+        const createBlog = async (formData: FormData) => {
+            'use server';
+
+            const title = formData.get('title')?.toString() ?? '';
+            const content = formData.get('content')?.toString() ?? '';
+            const tags = formData.get('tags')?.toString() ?? '';
+
+            const blogData = {
+                title,
+                content,
+                tags: tags
+                    .split(',')
+                    .map(item => item.trim())
+                    .filter(item => item !== '')
+            };
+
+            const cookieStore = await cookies();
+
+            const res = await fetch(`${API_URL}/posts`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Cookie: cookieStore.toString()
+                },
+                body: JSON.stringify(blogData)
+            });
+
+            // Check whether the API request succeeded
+            if (!res.ok) {
+                const errorText = await res.text();
+                console.error('Create blog failed:', res.status, errorText);
+                throw new Error(`Failed to create blog. Status: ${res.status}`);
+            }
+
+            // revalidateTag('blogData', 'max');
+
+            if (res.ok) {
+                // revalidateTag('blogData', 'max');
+                updateTag("blogData"); // use either one of them
+            }
+
+            // Redirect only after a successful response
+            // redirect('/dashboard/create-blog?success');
+
+            
+        };
     };
     return (
         <Card className="max-w-2xl mx-auto">

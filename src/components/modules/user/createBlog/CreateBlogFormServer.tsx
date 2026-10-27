@@ -10,7 +10,7 @@ import {
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { env } from '@/env';
-import { revalidateTag, updateTag } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -20,9 +20,17 @@ export default function CreateBlogFormServer() {
     const createBlog = async (formData: FormData) => {
         'use server';
 
-        const title = formData.get('title') as string;
-        const content = formData.get('content') as string;
-        const tags = formData.get('tags') as string;
+        const title = formData.get('title')?.toString().trim() ?? '';
+        const content = formData.get('content')?.toString().trim() ?? '';
+        const tags = formData.get('tags')?.toString() ?? '';
+
+        if (title.length < 3) {
+            throw new Error('Title must be at least 3 characters long');
+        }
+
+        if (content.length < 10) {
+            throw new Error('Content must be at least 10 characters long');
+        }
 
         const blogData = {
             title,
@@ -44,53 +52,21 @@ export default function CreateBlogFormServer() {
             body: JSON.stringify(blogData)
         });
 
-        const createBlog = async (formData: FormData) => {
-            'use server';
+        // Check whether the API request succeeded
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error('Create blog failed:', res.status, errorText);
+            throw new Error(`Failed to create blog. Status: ${res.status}`);
+        }
 
-            const title = formData.get('title')?.toString() ?? '';
-            const content = formData.get('content')?.toString() ?? '';
-            const tags = formData.get('tags')?.toString() ?? '';
+        if (res.ok) {
+            revalidateTag('blogData', 'max');
+            // updateTag("blogData");
+        }
 
-            const blogData = {
-                title,
-                content,
-                tags: tags
-                    .split(',')
-                    .map(item => item.trim())
-                    .filter(item => item !== '')
-            };
-
-            const cookieStore = await cookies();
-
-            const res = await fetch(`${API_URL}/posts`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Cookie: cookieStore.toString()
-                },
-                body: JSON.stringify(blogData)
-            });
-
-            // Check whether the API request succeeded
-            if (!res.ok) {
-                const errorText = await res.text();
-                console.error('Create blog failed:', res.status, errorText);
-                throw new Error(`Failed to create blog. Status: ${res.status}`);
-            }
-
-            // revalidateTag('blogData', 'max');
-
-            if (res.ok) {
-                // revalidateTag('blogData', 'max');
-                updateTag("blogData"); // use either one of them
-            }
-
-            // Redirect only after a successful response
-            // redirect('/dashboard/create-blog?success');
-
-            
-        };
-    };
+        // Redirect only after a successful response
+        redirect('/dashboard/create-blog?success');
+    };;
     return (
         <Card className="max-w-2xl mx-auto">
             <CardHeader>
@@ -102,15 +78,22 @@ export default function CreateBlogFormServer() {
                     <FieldGroup>
                         <Field>
                             <FieldLabel htmlFor="title">Title</FieldLabel>
-                            <Input id="title" name="title" placeholder="Blog Title" required />
+                            <Input
+                                id="title"
+                                name="title"
+                                placeholder="Blog Title"
+                                required
+                                minLength={3}
+                            />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="content">Content</FieldLabel>
                             <Input
                                 id="content"
                                 name="content"
-                                placeholder="Write your blog"
+                                placeholder="Write your blog content (at least 10 characters)"
                                 required
+                                minLength={10}
                             />
                         </Field>
                         <Field>

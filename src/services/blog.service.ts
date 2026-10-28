@@ -43,7 +43,7 @@ export const blogService = {
                 config.next = { revalidate: options.revalidate };
             }
 
-            config.next = {...config.next, tags: ["blogPosts"]};
+            config.next = { ...config.next, tags: ['blogPosts'] };
 
             // const response = await fetch(url.toString(), {
             //     next: {

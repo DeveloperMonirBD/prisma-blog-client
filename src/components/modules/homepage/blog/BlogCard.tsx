@@ -91,7 +91,7 @@ export default async function BlogCard() {
                                 {/* Tags */}
                                 {post.tags && post.tags.length > 0 && (
                                     <div className="mb-3 flex flex-wrap gap-2">
-                                        {post.tags.map(tag => (
+                                        {[...new Set(post.tags)].map(tag => (
                                             <span
                                                 key={tag}
                                                 className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">

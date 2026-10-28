@@ -66,7 +66,7 @@ export default function CreateBlogFormServer() {
 
         // Redirect only after a successful response
         redirect('/dashboard/create-blog?success');
-    };;
+    };
     return (
         <Card className="max-w-2xl mx-auto">
             <CardHeader>
